@@ -1,0 +1,438 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>SingIntegODE23PRWithInjCurr_db</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-07-04"><meta name="DC.source" content="SingIntegODE23PRWithInjCurr_db.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">What it does:</a></li><li><a href="#4">Dependencies</a></li><li><a href="#5">Inputs</a></li><li><a href="#7">Optional Inputs</a></li><li><a href="#8">User Inputs for integration parameters.</a></li><li><a href="#9">Initial state of ODE set prior to this subroutine and stored in aPR.SS</a></li><li><a href="#10">Reshape to use in MATLAB integrator</a></li><li><a href="#11">Call Ode23 to integrate function defined in PR94NoSyn</a></li></ul></div><pre class="codeinput">  <span class="keyword">function</span> SingPRWithInjCurr = SingIntegODE23PRWithInjCurr_db(aPR,uAmpsPermsecCm2,delay,Tend,VdsOut,VsThresh,SomaInj,termaftevent,varargin)
+</pre><pre class="codeinput"> <span class="comment">% 5/22/2015</span>
+</pre><h2>What it does:<a name="3"></a></h2><p>Intgegrates the polarized PR neuron and applies a current ramp This rouitne uses ODE 23 although ODE45 has also been used. ODE 23 was found to be faster than ODE45 and the solutions were identical to within machine precision.</p><h2>Dependencies<a name="4"></a></h2><div><ol><li><b>GateEquil.m</b></li><li><b>GateTimeConst.m</b></li><li><b>Kinetic gating variables</b> <img src="SingIntegODE23PRWithInjCurr_db_eq14221827199139923399.png" alt="$\alpha$"> and <img src="SingIntegODE23PRWithInjCurr_db_eq17331442575217596290.png" alt="$\beta$"> functions 12 total 6 <img src="SingIntegODE23PRWithInjCurr_db_eq14221827199139923399.png" alt="$\alpha$"> and  6 <img src="SingIntegODE23PRWithInjCurr_db_eq17331442575217596290.png" alt="$\beta$"> for each of m,n,h,s,c,q</li></ol></div><h2>Inputs<a name="5"></a></h2><div><ol><li><b>aPR</b> -- is a structure class defined by using InitPR</li><li><b>uAmpsPermsecCm2</b> -- is the slope of the injected current ramp note units this is M/1000, Where <img src="SingIntegODE23PRWithInjCurr_db_eq00802513524912003067.png" alt="$M$"> is per sec</li><li><b>delay</b> -- ms of delay before ramp starts</li><li><b>Tend</b> -- maximum time ode runs</li><li><b>VdsOut</b> -- the polarization expressed in potential difference outised cell from dendrite to soma</li><li><b>VsThresh</b> --the soma potential at which spike is said to occure and TTFS is measured</li><li><b>SomaInj</b> -- If true injected current ramp goes into soma if False it is injected into dendrite</li><li><b>termafterevent</b> -- to terminate after Vs passes through VsThresh applied to dendrite</li></ol></div><h2>Optional Inputs<a name="7"></a></h2><div><ol><li>varargin{1} = <b>RelTol</b>. Integrator specifications</li><li>varargin{2} = +AbsTol*. Integrator specifications</li><li>varargin{3} = <b>MaxStep</b>. Maximum step siez.</li></ol></div><h2>User Inputs for integration parameters.<a name="8"></a></h2><p>Note an event function is specified</p><pre class="codeinput">tstart1=tic;
+UseDefault=true;
+<span class="keyword">if</span> nargin == 0
+    options = odeset(<span class="string">'RelTol'</span>,1e-4,<span class="string">'Stats'</span>,<span class="string">'off'</span>,<span class="string">'MaxStep'</span>,1e-1,<span class="string">'Refine'</span>,4,<span class="string">'Events'</span>,@events,<span class="keyword">...</span>
+                 <span class="string">'OutputSel'</span>,1);
+<span class="keyword">elseif</span>  nargin == 1
+    options = odeset(<span class="string">'RelTol'</span>,varargin{1},<span class="string">'Stats'</span>,<span class="string">'off'</span>,<span class="string">'MaxStep'</span>,1e-1,<span class="string">'Refine'</span>,4,<span class="string">'Events'</span>,@events,<span class="keyword">...</span>
+                 <span class="string">'OutputSel'</span>,1);
+<span class="keyword">elseif</span> nargin == 2
+    options = odeset(<span class="string">'RelTol'</span>,varargin{1},<span class="string">'AbsTol'</span>,varargin{2},<span class="string">'Stats'</span>,<span class="string">'off'</span>,<span class="string">'MaxStep'</span>,1e-1,<span class="string">'Refine'</span>,4,<span class="string">'Events'</span>,@events,<span class="keyword">...</span>
+                 <span class="string">'OutputSel'</span>,1);
+<span class="keyword">elseif</span> nargin == 3
+    options = odeset(<span class="string">'RelTol'</span>,varargin{1},<span class="string">'AbsTol'</span>,varargin{2},<span class="string">'Stats'</span>,<span class="string">'off'</span>,<span class="string">'MaxStep'</span>,1e-1,<span class="string">'Refine'</span>,4,<span class="string">'Events'</span>,@events,<span class="keyword">...</span>
+                 <span class="string">'OutputSel'</span>,1);
+<span class="keyword">end</span>
+<span class="comment">% if UseDefault==true</span>
+<span class="comment">%     options = odeset('RelTol',1e-4,'Stats','off','MaxStep',1e-1,'Refine',4,'Events',@events,...</span>
+<span class="comment">%                  'OutputSel',1);</span>
+<span class="comment">%  else</span>
+<span class="comment">%     aRefine=1;</span>
+<span class="comment">%     aRelTol=1e-6;</span>
+<span class="comment">%     aMaxStep=1e-2;</span>
+<span class="comment">%     options = odeset('RelTol',aRelTol,'Stats','on','MaxStep',aMaxStep,'Refine',aRefine,'Events',@events,...</span>
+<span class="comment">%                  'OutputSel',1);</span>
+<span class="comment">%  end</span>
+<span class="comment">%tic</span>
+past=0; <span class="comment">%initialize the falg for wether or not a spike has occured</span>
+</pre><h2>Initial state of ODE set prior to this subroutine and stored in aPR.SS<a name="9"></a></h2><pre class="codeinput">multPRInitY=zeros(1,8);
+
+multPRInitY(1,1)=aPR.SS.NumSS(1);
+multPRInitY(1,2)=aPR.SS.NumSS(2);
+multPRInitY(1,3)=aPR.SS.NumSS(3);
+multPRInitY(1,4)=aPR.SS.NumSS(4);
+multPRInitY(1,5)=aPR.SS.NumSS(5);
+multPRInitY(1,6)=aPR.SS.NumSS(6);
+multPRInitY(1,7)=aPR.SS.NumSS(7);
+multPRInitY(1,8)=aPR.SS.NumSS(8);
+</pre><pre class="codeoutput error">Undefined variable aPR.
+
+Error in SingIntegODE23PRWithInjCurr_db (line 74)
+multPRInitY(1,1)=aPR.SS.NumSS(1);
+</pre><h2>Reshape to use in MATLAB integrator<a name="10"></a></h2><pre class="codeinput">multPRInitYCol=zeros(8,1);
+multPRInitYCol=reshape(multPRInitY,8,1);
+</pre><h2>Call Ode23 to integrate function defined in PR94NoSyn<a name="11"></a></h2><pre class="codeinput">[T,YMultcol,te,ye,ie] = ode23(@(t,Y) PR94NoSyn(t,Y),[0 Tend],multPRInitYCol,options);
+
+<span class="comment">% SingPRWithInjCurr is the structure containing the results of the</span>
+<span class="comment">% integration with metadat like the filename date and run time.</span>
+SingPRWithInjCurr.te = te;
+SingPRWithInjCurr.ye = ye;
+SingPRWithInjCurr.ie = ie;
+
+SingPRWithInjCurr.YMultcol=YMultcol;
+SingPRWithInjCurr.T = T;
+
+
+SingPRWithInjCurr.etime=toc(tstart1);
+SingPRWithInjCurr.datetime=datestr(now);
+SingPRWithInjCurr.file=mfilename;
+
+
+SingPRWithInjCurr.PR=aPR;
+SingPRWithInjCurr.NumN=1;
+SingPRWithInjCurr.uAmpsPerCm2=uAmpsPermsecCm2;
+SingPRWithInjCurr.VdsOut=VdsOut;
+SingPRWithInjCurr.Tend=Tend;
+SingPRWithInjCurr.delay=delay;
+<span class="keyword">if</span> isempty(te)
+    SingPRWithInjCurr.idxteVs=size(T,1);
+<span class="keyword">else</span>
+    SingPRWithInjCurr.idxteVs=find(T&gt;=te(1,1),1,<span class="string">'First'</span>);
+<span class="keyword">end</span>
+
+<span class="comment">%toc</span>
+SingPRWithInjCurr.etime=toc(tstart1);
+SingPRWithInjCurr.datetime=datestr(now);
+SingPRWithInjCurr.file=mfilename;
+
+
+<span class="keyword">function</span> dY = PR94NoSyn(t,Y)
+
+   Nn=sqrt(size(Y,1));
+   Y = reshape(Y,1,8);
+<span class="keyword">if</span> t &gt; delay
+<span class="keyword">if</span> SomaInj==true
+   <span class="keyword">if</span>(Y(1,1) &gt;= VsThresh | past == 1)
+        Isinj =aPR.Isinj;
+        past = 1;
+   <span class="keyword">else</span>
+        Isinj=aPR.Isinj+heaviside(t-delay)*uAmpsPermsecCm2*(t-delay);
+   <span class="keyword">end</span>
+   Idinj=aPR.Idinj;
+<span class="keyword">else</span>
+    <span class="keyword">if</span> Y(1,1) &gt;= VsThresh
+       Idinj =aPR.Idinj;
+    <span class="keyword">else</span>
+        Idinj=aPR.Idinj+heaviside(t-delay)*uAmpsPermsecCm2*(t-delay);
+    <span class="keyword">end</span>
+   Isinj=aPR.Isinj;
+<span class="keyword">end</span>
+<span class="keyword">else</span> <span class="comment">%t less than delay</span>
+    Isinj=aPR.Isinj;
+    Idinj=aPR.Idinj;
+<span class="keyword">end</span>
+    Cm=aPR.Cm;
+    gL=aPR.gL;
+    gNa=aPR.gNa;
+    gKDR=aPR.gKDR;
+    gKC=aPR.gKC;
+    gKAHP=aPR.gKAHP;
+    gCa=aPR.gCa;
+    ENa=aPR.ENa;            <span class="comment">%CHECK not sure this is good idea to double the # variable inside function to be integrated</span>
+    Ek=aPR.Ek;
+    EL=aPR.EL;
+    ECa=aPR.ECa;
+    p=aPR.p;
+    gc=aPR.gc;
+    WRT=aPR.WRT;
+    Vsyn=aPR.Vsyn;
+    MaxS=aPR.MaxS;
+dY = zeros(1,8);    <span class="comment">% a column vector</span>
+
+dY(1) = (1/Cm)*(-gL*(Y(1)-EL)-gNa*MInfPR94(Y(1),WRT).*Y(4).*(Y(1)-ENa)-gKDR*Y(5).*(Y(1)-Ek)<span class="keyword">...</span>
+        +(gc/p)*(Y(2)-Y(1)+VdsOut)+Isinj/p);
+dY(2) = (1/Cm)*(-gL*(Y(2)-EL)-gCa*(Y(2)-ECa).*Y(6).^2-gKAHP*Y(8).*(Y(2)-Ek)-gKC*Y(7).*Chi(Y(3)).*(Y(2)-Ek)<span class="keyword">...</span>
+            + gc/(1-p)*(Y(1)-Y(2)-VdsOut)+Idinj/(1-p));
+
+dY(3) = -0.13*gCa*(Y(2)-ECa).*Y(6).^2-0.075*Y(3);
+dY(4) = (GateEquil(alphah(Y(1),WRT),betah(Y(1),WRT))-Y(4))./GateTimeCnst(alphah(Y(1),WRT),betah(Y(1),WRT));
+dY(5) = (GateEquil(alphan(Y(1),WRT),betan(Y(1),WRT))-Y(5))./GateTimeCnst(alphan(Y(1),WRT),betan(Y(1),WRT));
+dY(6) = (GateEquil(alphas(Y(2),WRT),betas(Y(2),WRT))-Y(6))./GateTimeCnst(alphas(Y(2),WRT),betas(Y(2),WRT));
+dY(7) = (GateEquil(alphac (Y(2),WRT),betac(Y(2),WRT))-Y(7))./GateTimeCnst(alphac(Y(2),WRT),betac(Y(2),WRT));
+dY(8) = (GateEquil(alphaq(Y(3)),betaq)-Y(8))./GateTimeCnst(alphaq(Y(3)),betaq);
+
+dY = reshape(dY,8,1);
+<span class="keyword">end</span>
+
+
+<span class="keyword">function</span> CaSatChi= Chi(Ca)
+    CaSatChi = min(Ca/250,1);
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> MInfsqr = MInfPR94(Vs,WRT)
+    alp=alpham(Vs,WRT);
+    bet=betam(Vs,WRT);
+    MInfsqr = GateEquil(alp,bet).^2;
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [value,isterminal,direction] = events(t,y)
+<span class="comment">% Locate the time when potential passes through zero in a</span>
+<span class="comment">% decreasing direction and stop integration.</span>
+value = y(1)-VsThresh;     <span class="comment">% Detect Soma = 10</span>
+<span class="keyword">if</span> termaftevent==true
+    isterminal = 1;   <span class="comment">% Stop the integration</span>
+<span class="keyword">else</span>
+    isterminal = 0;   <span class="comment">% Keep going</span>
+<span class="keyword">end</span>
+direction = 1;   <span class="comment">% positive direction only</span>
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+
+  function SingPRWithInjCurr = SingIntegODE23PRWithInjCurr_db(aPR,uAmpsPermsecCm2,delay,Tend,VdsOut,VsThresh,SomaInj,termaftevent,varargin)
+
+ % 5/22/2015 
+ %% What it does:
+ % Intgegrates the polarized PR neuron and applies a current ramp 
+ % This rouitne uses ODE 23 although ODE45 has also been used. ODE 23 was
+ % found to be faster than ODE45 and the solutions were identical to within
+ % machine precision.
+ 
+%%  Dependencies
+% # *GateEquil.m*
+% # *GateTimeConst.m*
+% # *Kinetic gating variables* $\alpha$ and $\beta$ functions
+% 12 total 6 $\alpha$ and  6 $\beta$ for each of 
+% m,n,h,s,c,q
+
+%% Inputs
+%%
+% 
+% # *aPR* REPLACE_WITH_DASH_DASH is a structure class defined by using InitPR
+% # *uAmpsPermsecCm2* REPLACE_WITH_DASH_DASH is the slope of the injected current ramp note units
+% this is M/1000, Where $M$ is per sec
+% # *delay* REPLACE_WITH_DASH_DASH ms of delay before ramp starts
+% # *Tend* REPLACE_WITH_DASH_DASH maximum time ode runs
+% # *VdsOut* REPLACE_WITH_DASH_DASH the polarization expressed in potential difference outised cell
+% from dendrite to soma
+% # *VsThresh* REPLACE_WITH_DASH_DASHthe soma potential at which spike is said to occure and TTFS
+% is measured
+% # *SomaInj* REPLACE_WITH_DASH_DASH If true injected current ramp goes into soma if False it is
+% injected into dendrite
+% # *termafterevent* REPLACE_WITH_DASH_DASH to terminate after Vs passes through VsThresh
+% applied to dendrite
+
+%% Optional Inputs
+%
+% # varargin{1} = *RelTol*. Integrator specifications
+% # varargin{2} = +AbsTol*. Integrator specifications
+% # varargin{3} = *MaxStep*. Maximum step siez.
+
+%% User Inputs for integration parameters. 
+% Note an event function is specified
+tstart1=tic;
+UseDefault=true;
+if nargin == 0
+    options = odeset('RelTol',1e-4,'Stats','off','MaxStep',1e-1,'Refine',4,'Events',@events,...
+                 'OutputSel',1);
+elseif  nargin == 1
+    options = odeset('RelTol',varargin{1},'Stats','off','MaxStep',1e-1,'Refine',4,'Events',@events,...
+                 'OutputSel',1);
+elseif nargin == 2
+    options = odeset('RelTol',varargin{1},'AbsTol',varargin{2},'Stats','off','MaxStep',1e-1,'Refine',4,'Events',@events,...
+                 'OutputSel',1);
+elseif nargin == 3
+    options = odeset('RelTol',varargin{1},'AbsTol',varargin{2},'Stats','off','MaxStep',1e-1,'Refine',4,'Events',@events,...
+                 'OutputSel',1);
+end
+% if UseDefault==true
+%     options = odeset('RelTol',1e-4,'Stats','off','MaxStep',1e-1,'Refine',4,'Events',@events,...
+%                  'OutputSel',1);
+%  else
+%     aRefine=1;
+%     aRelTol=1e-6;
+%     aMaxStep=1e-2;
+%     options = odeset('RelTol',aRelTol,'Stats','on','MaxStep',aMaxStep,'Refine',aRefine,'Events',@events,...
+%                  'OutputSel',1);   
+%  end
+%tic
+past=0; %initialize the falg for wether or not a spike has occured
+
+%% Initial state of ODE set prior to this subroutine and stored in aPR.SS
+multPRInitY=zeros(1,8);
+
+multPRInitY(1,1)=aPR.SS.NumSS(1);
+multPRInitY(1,2)=aPR.SS.NumSS(2);
+multPRInitY(1,3)=aPR.SS.NumSS(3);
+multPRInitY(1,4)=aPR.SS.NumSS(4);
+multPRInitY(1,5)=aPR.SS.NumSS(5);
+multPRInitY(1,6)=aPR.SS.NumSS(6);
+multPRInitY(1,7)=aPR.SS.NumSS(7);
+multPRInitY(1,8)=aPR.SS.NumSS(8);
+
+%% Reshape to use in MATLAB integrator
+multPRInitYCol=zeros(8,1);
+multPRInitYCol=reshape(multPRInitY,8,1);
+
+%% Call Ode23 to integrate function defined in PR94NoSyn
+
+[T,YMultcol,te,ye,ie] = ode23(@(t,Y) PR94NoSyn(t,Y),[0 Tend],multPRInitYCol,options);
+
+% SingPRWithInjCurr is the structure containing the results of the
+% integration with metadat like the filename date and run time.
+SingPRWithInjCurr.te = te;
+SingPRWithInjCurr.ye = ye;
+SingPRWithInjCurr.ie = ie;
+
+SingPRWithInjCurr.YMultcol=YMultcol;
+SingPRWithInjCurr.T = T;
+
+
+SingPRWithInjCurr.etime=toc(tstart1);
+SingPRWithInjCurr.datetime=datestr(now);
+SingPRWithInjCurr.file=mfilename;
+
+
+SingPRWithInjCurr.PR=aPR;
+SingPRWithInjCurr.NumN=1;
+SingPRWithInjCurr.uAmpsPerCm2=uAmpsPermsecCm2;
+SingPRWithInjCurr.VdsOut=VdsOut;
+SingPRWithInjCurr.Tend=Tend;
+SingPRWithInjCurr.delay=delay;
+if isempty(te) 
+    SingPRWithInjCurr.idxteVs=size(T,1);
+else
+    SingPRWithInjCurr.idxteVs=find(T>=te(1,1),1,'First');
+end
+
+%toc
+SingPRWithInjCurr.etime=toc(tstart1);
+SingPRWithInjCurr.datetime=datestr(now);
+SingPRWithInjCurr.file=mfilename;
+
+
+function dY = PR94NoSyn(t,Y)
+
+   Nn=sqrt(size(Y,1));
+   Y = reshape(Y,1,8);
+if t > delay
+if SomaInj==true
+   if(Y(1,1) >= VsThresh | past == 1)
+        Isinj =aPR.Isinj;
+        past = 1;
+   else
+        Isinj=aPR.Isinj+heaviside(t-delay)*uAmpsPermsecCm2*(t-delay);
+   end
+   Idinj=aPR.Idinj;
+else
+    if Y(1,1) >= VsThresh
+       Idinj =aPR.Idinj;
+    else
+        Idinj=aPR.Idinj+heaviside(t-delay)*uAmpsPermsecCm2*(t-delay);
+    end
+   Isinj=aPR.Isinj;
+end
+else %t less than delay
+    Isinj=aPR.Isinj;
+    Idinj=aPR.Idinj;
+end
+    Cm=aPR.Cm;
+    gL=aPR.gL;
+    gNa=aPR.gNa;
+    gKDR=aPR.gKDR;
+    gKC=aPR.gKC;
+    gKAHP=aPR.gKAHP;
+    gCa=aPR.gCa;
+    ENa=aPR.ENa;            %CHECK not sure this is good idea to double the # variable inside function to be integrated
+    Ek=aPR.Ek;
+    EL=aPR.EL;
+    ECa=aPR.ECa;
+    p=aPR.p;
+    gc=aPR.gc;
+    WRT=aPR.WRT;
+    Vsyn=aPR.Vsyn;
+    MaxS=aPR.MaxS;
+dY = zeros(1,8);    % a column vector
+
+dY(1) = (1/Cm)*(-gL*(Y(1)-EL)-gNa*MInfPR94(Y(1),WRT).*Y(4).*(Y(1)-ENa)-gKDR*Y(5).*(Y(1)-Ek)...
+        +(gc/p)*(Y(2)-Y(1)+VdsOut)+Isinj/p);
+dY(2) = (1/Cm)*(-gL*(Y(2)-EL)-gCa*(Y(2)-ECa).*Y(6).^2-gKAHP*Y(8).*(Y(2)-Ek)-gKC*Y(7).*Chi(Y(3)).*(Y(2)-Ek)...
+            + gc/(1-p)*(Y(1)-Y(2)-VdsOut)+Idinj/(1-p));
+
+dY(3) = -0.13*gCa*(Y(2)-ECa).*Y(6).^2-0.075*Y(3);
+dY(4) = (GateEquil(alphah(Y(1),WRT),betah(Y(1),WRT))-Y(4))./GateTimeCnst(alphah(Y(1),WRT),betah(Y(1),WRT));
+dY(5) = (GateEquil(alphan(Y(1),WRT),betan(Y(1),WRT))-Y(5))./GateTimeCnst(alphan(Y(1),WRT),betan(Y(1),WRT));
+dY(6) = (GateEquil(alphas(Y(2),WRT),betas(Y(2),WRT))-Y(6))./GateTimeCnst(alphas(Y(2),WRT),betas(Y(2),WRT));
+dY(7) = (GateEquil(alphac (Y(2),WRT),betac(Y(2),WRT))-Y(7))./GateTimeCnst(alphac(Y(2),WRT),betac(Y(2),WRT));
+dY(8) = (GateEquil(alphaq(Y(3)),betaq)-Y(8))./GateTimeCnst(alphaq(Y(3)),betaq);
+
+dY = reshape(dY,8,1);
+end
+
+
+function CaSatChi= Chi(Ca)
+    CaSatChi = min(Ca/250,1);
+end
+
+function MInfsqr = MInfPR94(Vs,WRT) 
+    alp=alpham(Vs,WRT);
+    bet=betam(Vs,WRT);
+    MInfsqr = GateEquil(alp,bet).^2;
+end
+
+function [value,isterminal,direction] = events(t,y)
+% Locate the time when potential passes through zero in a 
+% decreasing direction and stop integration.
+value = y(1)-VsThresh;     % Detect Soma = 10
+if termaftevent==true
+    isterminal = 1;   % Stop the integration
+else
+    isterminal = 0;   % Keep going
+end
+direction = 1;   % positive direction only
+end
+end
+
+##### SOURCE END #####
+--></body></html>

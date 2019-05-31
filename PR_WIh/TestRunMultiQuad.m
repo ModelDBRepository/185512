@@ -1,0 +1,3 @@
+QuadFigureWithIh
+QuadFigureWithIh2
+QuadFigureWithIh3

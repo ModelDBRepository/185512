@@ -1,0 +1,145 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Test_Code</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-08-15"><meta name="DC.source" content="Test_Code.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">'Effcts of Polarization Induced by Non-Weak Electric Fields on the Excitability of Elongated Neurons With Active Dendrites'</a></li><li><a href="#3">First define parameters for the model neuron:</a></li><li><a href="#4">Run script for creating Fig. 3 TTFS as a function of polarization 4 Ek-M pairs with linear fit</a></li></ul></div><pre class="codeinput"><span class="comment">% Script for testing code associated with</span>
+</pre><h2>'Effcts of Polarization Induced by Non-Weak Electric Fields on the Excitability of Elongated Neurons With Active Dendrites'<a name="2"></a></h2><h2>First define parameters for the model neuron:<a name="3"></a></h2><pre class="codeinput">Isinj=-0.5; <span class="comment">% \muA/cm^{2}</span>
+Ek=-35; <span class="comment">% mV</span>
+varargin=[];
+
+aPR=IniPR_db(Isinj,Ek,varargin)
+
+<span class="comment">% Any of the PR model parameters can be changed at anytime as</span>
+<span class="comment">% aPR.property=x will overwrite default values.the order of varargin is</span>
+<span class="comment">% {E_{Na},\rho,g_{c},g_{KAHP},g_{KC},Idinj}</span>
+</pre><pre class="codeoutput">
+aPR = 
+
+             Cm: 3
+             gL: 0.1000
+            gNa: 30
+           gKDR: 15
+            gKC: 15
+          gKAHP: 0.8000
+            gCa: 10
+            ENa: []
+             Ek: -35
+             EL: 0
+            ECa: 140
+              p: 0.5000
+             gc: 2.1000
+            WRT: -60
+           Vsyn: 60
+           MaxS: 125
+          Isinj: -0.5000
+          Idinj: 0
+    TotMembArea: 6.0000e-06
+          Units: [1x1 struct]
+      RDSinOhms: 7.9365e+07
+     RDSinMOhms: 79.3651
+
+</pre><h2>Run script for creating Fig. 3 TTFS as a function of polarization 4 Ek-M pairs with linear fit<a name="4"></a></h2><pre class="codeinput">Fig3_EffectsNonWeakFit_db
+</pre><pre class="codeoutput">
+ans =
+
+   -15
+
+
+ans =
+
+   1.9164e+03
+
+</pre><pre class="codeoutput error">Error using regress (line 62)
+Y must be a vector and must have the same number of rows as X.
+
+Error in Fig3_EffectsNonWeakFit_db (line 112)
+    [b,bint,r,rint,stats]=regress(VsVdTrace(i,j).TTFS(1,indexVdsfit1:indexVdsfit2)',[ones(size(x1,2)),VsVdTrace(i,j).VdsOut(1,:)']);
+
+Error in Test_Code (line 18)
+Fig3_EffectsNonWeakFit_db
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Script for testing code associated with
+%% 'Effcts of Polarization Induced by Non-Weak Electric Fields on the Excitability of Elongated Neurons With Active Dendrites'
+
+%% First define parameters for the model neuron:
+
+Isinj=-0.5; % \muA/cm^{2}
+Ek=-35; % mV
+varargin=[];
+
+aPR=IniPR_db(Isinj,Ek,varargin)
+
+% Any of the PR model parameters can be changed at anytime as
+% aPR.property=x will overwrite default values.the order of varargin is
+% {E_{Na},\rho,g_{c},g_{KAHP},g_{KC},Idinj}
+
+%% Run script for creating Fig. 3 TTFS as a function of polarization 4 Ek-M pairs with linear fit
+
+Fig3_EffectsNonWeakFit_db
+##### SOURCE END #####
+--></body></html>

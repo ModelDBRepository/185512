@@ -1,0 +1,244 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Figure 3- Effects of Polarization Induced by Non-Weak Electric Fields on the Excitability of Elongated Neurons With Active Dendrites</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-07-08"><meta name="DC.source" content="Fig3_EffectsNonWeak_db.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Figure 3- Effects of Polarization Induced by Non-Weak Electric Fields on the Excitability of Elongated Neurons With Active Dendrites</h1><!--introduction--><p>RIR July 8, 2015 Weak and Intermediate polarization With Linear Fit. Assumes four panels each with a different pair of M and E_{K} Default: Ek={-25,-45} mV X M = {0.3,0.8} \muA/(cm^{2} s) Ramp current injection protocol RIR July 5, 2015</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Dependencies</a></li><li><a href="#2">User Supplied Inputs</a></li></ul></div><h2>Dependencies<a name="1"></a></h2><div><ol><li>IniPR_db</li><li>NumerEquilPR_db</li><li>SingIntegODE23PRWithInjCurr_db</li></ol></div><h2>User Supplied Inputs<a name="2"></a></h2><div><ol><li>Specify range of V_{ds}^{out} by   MaxVdsOut, DeltaVdsOut, and NumVdsOut</li><li>Ms: The slope of the injected current in</li></ol></div><pre class="codeinput">MaxVdsOut=10; <span class="comment">%Default: 10 mV</span>
+DeltaVdsOut=0.5; <span class="comment">%Default: 0.5 mV</span>
+NumVdsOut=51;   <span class="comment">%Default: 51</span>
+Ms=[0.8,0.3];
+Eks=[-45,-25];
+guessVsVd=[0,0];
+SomaInj=true;
+VsThresh=30;
+<span class="comment">%delay =500;</span>
+delay=40; <span class="comment">%prior to this model neuron should be at rest with VdsOut. Provides a good sanity check clear before and after, just remember to subtract delay from spike time to get TTFS</span>
+Tend=17500;
+termaftevent=true;
+Isinj=-0.5;
+smp=[15,47];
+f1=figure();
+<span class="keyword">for</span> i=1:2
+    tmpM=Ms(i);
+    tmpuAmpsPermsecCm2=tmpM*1e-3;
+    <span class="keyword">for</span> j=1:2
+       tmpEk=Eks(j);
+       tmpPR=IniPR_db(Isinj,tmpEk);
+       <span class="keyword">for</span> k=1:NumVdsOut
+           tmpVdsOut=MaxVdsOut-(k-1)*DeltaVdsOut;
+           [tmpnumSSPR,diffProjFullEq,Jacob,eigJacob,nzeig] = NumerEquilPR_db(tmpPR,guessVsVd,tmpVdsOut);
+           tmpPR.SS.NumSS=tmpnumSSPR;
+           tmpSingPR = SingIntegODE23PRWithInjCurr_db(tmpPR,tmpuAmpsPermsecCm2,delay,Tend,tmpVdsOut,VsThresh,SomaInj,termaftevent);
+           subsample=100;
+           extr=1:subsample:size(tmpSingPR.T,1);
+           VsVdTrace(i,j).T(k).T=tmpSingPR.T(extr);
+           VsVdTrace(i,j).Vs(k).Vs=tmpSingPR.YMultcol(extr,1);
+           VsVdTrace(i,j).Vd(k).Vd=tmpSingPR.YMultcol(extr,2);
+           VsVdTrace(i,j).VdsOut(k)=tmpVdsOut;
+           VsVdTrace(i,j).TTFS(k)=tmpSingPR.te-tmpSingPR.delay;
+           VsVdTrace(i,j).M=tmpM;
+           VsVdTrace(i,j).Ek=tmpEk;
+       <span class="keyword">end</span>
+       idx=2*(i-1)+j;
+       subplot(2,2,idx)
+       def=linspace(1,NumVdsOut,NumVdsOut);
+       nosubidx=find(def~=smp(1,1) &amp; def ~= smp(1,2));
+       plot(VsVdTrace(i,j).VdsOut(nosubidx),VsVdTrace(i,j).TTFS(nosubidx),<span class="string">'ok'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'k'</span>,<span class="string">'MarkerSize'</span>,2)
+       hold <span class="string">on</span>;
+       plot(VsVdTrace(i,j).VdsOut(smp(1)),VsVdTrace(i,j).TTFS(smp(1)),<span class="string">'ok'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'w'</span>,<span class="string">'MarkerSize'</span>,4)
+       hold <span class="string">on</span>;
+       plot(VsVdTrace(i,j).VdsOut(smp(2)),VsVdTrace(i,j).TTFS(smp(2)),<span class="string">'+k'</span>,<span class="string">'MarkerSize'</span>,6)
+       title({[<span class="string">'m = '</span>, num2str(tmpM),<span class="string">' \muA/(cm^{2} s)'</span>,<span class="string">' Ek= '</span>,num2str(tmpEk),<span class="string">' mV'</span>]},<span class="string">'FontSize'</span>,10)
+       ax1=gca();
+       set(ax1,<span class="string">'FontSize'</span>,8)
+       hold <span class="string">off</span>;
+
+       <span class="keyword">if</span> idx==1
+       axes(<span class="string">'Position'</span>,[.38 .8 .1 .1])
+       <span class="keyword">elseif</span> idx==2
+       axes(<span class="string">'Position'</span>,[.88 .8 .1 .1])
+       <span class="keyword">elseif</span> idx==3
+       axes(<span class="string">'Position'</span>,[.38 .3 .1 .1])
+       <span class="keyword">elseif</span> idx==4
+       axes(<span class="string">'Position'</span>,[.88 .3 .1 .1])
+       <span class="keyword">end</span>
+       box <span class="string">on</span>
+       plot(VsVdTrace(i,j).T(smp(1)).T,VsVdTrace(i,j).Vs(smp(1)).Vs,<span class="string">'ok'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'w'</span>,<span class="string">'MarkerSize'</span>,2,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'w'</span>)
+       hold <span class="string">on</span>;
+       plot(VsVdTrace(i,j).T(smp(2)).T,VsVdTrace(i,j).Vs(smp(2)).Vs,<span class="string">'+k'</span>,<span class="string">'MarkerSize'</span>,2)
+       ylabel(<span class="string">'V_{s} (mV)'</span>,<span class="string">'FontSize'</span>,8)
+       xlabel(<span class="string">'Time (ms)'</span>,<span class="string">'FontSize'</span>,8)
+       ax3=gca();
+       set(ax3,<span class="string">'FontSize'</span>,8)
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% aPR=IniPR_db(Isinj,Ek,varargin);</span>
+<span class="comment">% [numSSPR,diffProjFullEq,Jacob,eigJacob,nzeig] = NumerEquilPR_db(aPR,guessVsVd,tmpVdsOut);</span>
+<span class="comment">%</span>
+<span class="comment">% tmpSingPR = SingIntegODE23PRWithInjCurr_db(aPR,uAmpsPermsecCm2,delay,Tend,VdsOut,VsThresh,SomaInj,termaftevent,varargin);</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Figure 3- Effects of Polarization Induced by Non-Weak Electric Fields on the Excitability of Elongated Neurons With Active Dendrites 
+% RIR July 8, 2015
+% Weak and Intermediate polarization 
+% With Linear Fit. 
+% Assumes four panels each with a different pair of M and E_{K}
+% Default: Ek={-25,-45} mV X M = {0.3,0.8} \muA/(cm^{2} s)
+% Ramp current injection protocol
+% RIR July 5, 2015
+
+%% Dependencies
+% # IniPR_db
+% # NumerEquilPR_db
+% # SingIntegODE23PRWithInjCurr_db
+
+%% User Supplied Inputs
+% # Specify range of V_{ds}^{out} by
+%   MaxVdsOut, DeltaVdsOut, and NumVdsOut 
+% # Ms: The slope of the injected current in 
+
+
+ 
+MaxVdsOut=10; %Default: 10 mV
+DeltaVdsOut=0.5; %Default: 0.5 mV
+NumVdsOut=51;   %Default: 51
+Ms=[0.8,0.3];
+Eks=[-45,-25];
+guessVsVd=[0,0];
+SomaInj=true;
+VsThresh=30;
+%delay =500; 
+delay=40; %prior to this model neuron should be at rest with VdsOut. Provides a good sanity check clear before and after, just remember to subtract delay from spike time to get TTFS
+Tend=17500;
+termaftevent=true;
+Isinj=-0.5;
+smp=[15,47];
+f1=figure();
+for i=1:2
+    tmpM=Ms(i);
+    tmpuAmpsPermsecCm2=tmpM*1e-3;
+    for j=1:2
+       tmpEk=Eks(j); 
+       tmpPR=IniPR_db(Isinj,tmpEk);
+       for k=1:NumVdsOut
+           tmpVdsOut=MaxVdsOut-(k-1)*DeltaVdsOut;
+           [tmpnumSSPR,diffProjFullEq,Jacob,eigJacob,nzeig] = NumerEquilPR_db(tmpPR,guessVsVd,tmpVdsOut); 
+           tmpPR.SS.NumSS=tmpnumSSPR;
+           tmpSingPR = SingIntegODE23PRWithInjCurr_db(tmpPR,tmpuAmpsPermsecCm2,delay,Tend,tmpVdsOut,VsThresh,SomaInj,termaftevent);
+           subsample=100;
+           extr=1:subsample:size(tmpSingPR.T,1);
+           VsVdTrace(i,j).T(k).T=tmpSingPR.T(extr);
+           VsVdTrace(i,j).Vs(k).Vs=tmpSingPR.YMultcol(extr,1);
+           VsVdTrace(i,j).Vd(k).Vd=tmpSingPR.YMultcol(extr,2);
+           VsVdTrace(i,j).VdsOut(k)=tmpVdsOut;
+           VsVdTrace(i,j).TTFS(k)=tmpSingPR.te-tmpSingPR.delay;
+           VsVdTrace(i,j).M=tmpM;
+           VsVdTrace(i,j).Ek=tmpEk;
+       end
+       idx=2*(i-1)+j;
+       subplot(2,2,idx)
+       def=linspace(1,NumVdsOut,NumVdsOut);
+       nosubidx=find(def~=smp(1,1) & def ~= smp(1,2));
+       plot(VsVdTrace(i,j).VdsOut(nosubidx),VsVdTrace(i,j).TTFS(nosubidx),'ok','MarkerFaceColor','k','MarkerSize',2)
+       hold on;
+       plot(VsVdTrace(i,j).VdsOut(smp(1)),VsVdTrace(i,j).TTFS(smp(1)),'ok','MarkerFaceColor','w','MarkerSize',4)
+       hold on;
+       plot(VsVdTrace(i,j).VdsOut(smp(2)),VsVdTrace(i,j).TTFS(smp(2)),'+k','MarkerSize',6)
+       title({['m = ', num2str(tmpM),' \muA/(cm^{2} s)',' Ek= ',num2str(tmpEk),' mV']},'FontSize',10)
+       ax1=gca();
+       set(ax1,'FontSize',8)
+       hold off;
+       
+       if idx==1
+       axes('Position',[.38 .8 .1 .1])
+       elseif idx==2
+       axes('Position',[.88 .8 .1 .1])
+       elseif idx==3
+       axes('Position',[.38 .3 .1 .1])
+       elseif idx==4
+       axes('Position',[.88 .3 .1 .1])
+       end
+       box on
+       plot(VsVdTrace(i,j).T(smp(1)).T,VsVdTrace(i,j).Vs(smp(1)).Vs,'ok','MarkerFaceColor','w','MarkerSize',2,'MarkerEdgeColor','w')
+       hold on;
+       plot(VsVdTrace(i,j).T(smp(2)).T,VsVdTrace(i,j).Vs(smp(2)).Vs,'+k','MarkerSize',2)
+       ylabel('V_{s} (mV)','FontSize',8)
+       xlabel('Time (ms)','FontSize',8)
+       ax3=gca();
+       set(ax3,'FontSize',8)
+    end
+end
+
+% aPR=IniPR_db(Isinj,Ek,varargin);
+% [numSSPR,diffProjFullEq,Jacob,eigJacob,nzeig] = NumerEquilPR_db(aPR,guessVsVd,tmpVdsOut);
+% 
+% tmpSingPR = SingIntegODE23PRWithInjCurr_db(aPR,uAmpsPermsecCm2,delay,Tend,VdsOut,VsThresh,SomaInj,termaftevent,varargin);
+
+
+
+##### SOURCE END #####
+--></body></html>
